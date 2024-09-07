@@ -39,7 +39,7 @@ public class Seat {
 
     /** Desocupa el asiento. */
     public void releaseSeat() {
-        this.available = false;
+        this.available = true;
     }
 }
 

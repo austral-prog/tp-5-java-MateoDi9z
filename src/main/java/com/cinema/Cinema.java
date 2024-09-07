@@ -52,7 +52,10 @@ public class Cinema {
      * Busca la primera butaca libre dentro de una fila o null si no encuentra.
      */
     public Seat findFirstAvailableSeatInRow(int row) {
-        for (Seat seat : this.seats[row]) {
+        if (this.seats.length < row) return null;
+
+        Seat[] seatsRow = this.seats[row];
+        for (Seat seat : seatsRow) {
             if (seat.isAvailable()) {
                 return seat;
             }
@@ -81,12 +84,18 @@ public class Cinema {
      */
     public Seat getAvailableSeatsInRow(int row, int amount) {
         int i = 0;
+        Seat first = null;
         for (Seat seat : this.seats[row]) {
-            if (seat.isAvailable()) i++;
-            else i = 0;
+            if (seat.isAvailable()) {
+                if (i == 0) first = seat;
+                i++;
+            } else {
+                i = 0;
+                first = null;
+            }
 
             if (i == amount) {
-                return seat;
+                return first;
             }
         }
         return null;
@@ -100,13 +109,19 @@ public class Cinema {
      */
     public Seat getAvailableSeats(int amount) {
         int i = 0;
+        Seat first = null;
         for (Seat[] row : this.seats) {
             for (Seat seat : row) {
-                if (seat.isAvailable()) i++;
-                else i = 0;
+                if (seat.isAvailable()) {
+                    if (i == 0) first = seat;
+                    i++;
+                } else {
+                    i = 0;
+                    first = null;
+                }
     
                 if (i == amount) {
-                    return seat;
+                    return first;
                 }
             }
         }
