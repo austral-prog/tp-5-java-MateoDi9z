@@ -27,6 +27,7 @@ public class Cinema {
         for (int i = 0; i < rows.length; i++) {
             seats[i] = new Seat[rows[i]];
         }
+
         for (int i = 0; i < seats.length; i++) {
             for (int j = 0; j < seats[i].length; j++) {
                 seats[i][j] = new Seat(i, j);
@@ -38,21 +39,37 @@ public class Cinema {
      * Cuenta la cantidad de seats disponibles en el cine.
      */
     public int countAvailableSeats() {
-        ...
+        int i = 0;
+        for (Seat[] row : this.seats) {
+            for (Seat seat : row) {
+                if (seat.isAvailable()) i++;
+            }
+        }
+        return i;
     }
 
     /**
      * Busca la primera butaca libre dentro de una fila o null si no encuentra.
      */
     public Seat findFirstAvailableSeatInRow(int row) {
-        ...
+        for (Seat seat : this.seats[row]) {
+            if (seat.isAvailable()) {
+                return seat;
+            }
+        }
+        return null;
     }
 
     /**
      * Busca la primera butaca libre o null si no encuentra.
      */
     public Seat findFirstAvailableSeat() {
-        ...
+        for (Seat[] row : this.seats) {
+            for (Seat seat : row) {
+                if (seat.isAvailable()) return seat;
+            }
+        }
+        return null;
     }
 
     /**
@@ -63,7 +80,16 @@ public class Cinema {
      * @return La primer butaca de la serie de N butacas, si no hay retorna null.
      */
     public Seat getAvailableSeatsInRow(int row, int amount) {
-        ...
+        int i = 0;
+        for (Seat seat : this.seats[row]) {
+            if (seat.isAvailable()) i++;
+            else i = 0;
+
+            if (i == amount) {
+                return seat;
+            }
+        }
+        return null;
     }
 
     /**
@@ -73,7 +99,18 @@ public class Cinema {
      * @param amount el número de butacas pedidas.
      */
     public Seat getAvailableSeats(int amount) {
-        ...
+        int i = 0;
+        for (Seat[] row : this.seats) {
+            for (Seat seat : row) {
+                if (seat.isAvailable()) i++;
+                else i = 0;
+    
+                if (i == amount) {
+                    return seat;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -83,7 +120,12 @@ public class Cinema {
      * @param amount la cantidad de butacas a reservar.
      */
     public void takeSeats(Seat seat, int amount) {
-        ...
+        int row = seat.getRow();
+        int seatNumber = seat.getSeatNumber();
+
+        for (int i = 0; i < amount; i++) {
+            seats[row][seatNumber + i].takeSeat();
+        }
     }
 
     /**
@@ -93,6 +135,11 @@ public class Cinema {
      * @param amount la cantidad de butacas a liberar.
      */
     public void releaseSeats(Seat seat, int amount) {
-        ...
+        int row = seat.getRow();
+        int seatNumber = seat.getSeatNumber();
+
+        for (int i = 0; i < amount; i++) {
+            seats[row][seatNumber + i].releaseSeat();
+        }
     }
 }
